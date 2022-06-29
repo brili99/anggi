@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anggi Dashboard Monitor</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+        integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.colVis.min.js"></script>
+
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/9.6.7/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/9.6.7/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style>
+        body {
+            background-image: url('img/bg1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img
+                    src="https://firebase.google.com/downloads/brand-guidelines/PNG/logo-standard.png?hl=id" alt=""
+                    height="30"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center w-100">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about_bmi.html">About BMI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard Monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="grafis.html">Grafik</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="inputUser.html">Input User</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-warning" onclick="profil()">Profil</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mt-1 mb-2">
+                    <div class="card-header">Berat</div>
+                    <div class="card-body">
+                        <canvas id="chartBerat" class="w-100"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card mt-1 mb-2">
+                    <div class="card-header">Tinggi</div>
+                    <div class="card-body">
+                        <canvas id="chartTinggi" class="w-100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const configBerat = {
+            type: 'line',
+            data: {
+                labels: [''],
+                datasets: [{
+                    label: 'Berat',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [0],
+                }]
+            },
+            options: {}
+        };
+
+        const chartBerat = new Chart(
+            document.getElementById('chartBerat'),
+            configBerat
+        );
+    </script>
+    <script>
+        const configTinggi = {
+            type: 'line',
+            data: {
+                labels: [''],
+                datasets: [{
+                    label: 'Tinggi',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [0],
+                }]
+            },
+            options: {}
+        };
+
+        const chartTinggi = new Chart(
+            document.getElementById('chartTinggi'),
+            configTinggi
+        );
+    </script>
+    <script>
+        function profil() {
+            Swal.fire({
+                title: 'Profil',
+                html: 'Arika Anggi Cahyani<br>20/460862/SV/17943<br>Teknologi Rekayasa Instrumentasi dan Kontrol<br>Sekolah Vokasi<br>arikacahyani12@gmail.com',
+                imageUrl: 'img/profil.jpeg',
+                imageWidth: 330,
+                imageHeight: 467,
+                imageAlt: 'Custom image',
+            })
+        }
+        var insert_log = 1;
+        $(document).ready(function () {
+            var table = $('#log_table').DataTable({
+                lengthChange: false,
+                buttons: ['copy', 'excel', 'pdf', 'colvis']
+            });
+
+            table.buttons().container()
+                .appendTo('#log_table_wrapper .col-md-6:eq(0)');
+
+            const loadEl = document.querySelector('#load');
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+            // // The Firebase SDK is initialized and available here!
+            //
+            // firebase.auth().onAuthStateChanged(user => { });
+
+            const fb = firebase.database();
+            var realtime = false;
+            fb.ref('/log').once('value', snapshot => {
+                var log = snapshot.val();
+                var tenItemBerat = [];
+                var tenItemTinggi = [];
+                var tenItemUpdated = [];
+                $.each(log, function (key, value) {
+                    if (
+                        value.berat != null &&
+                        value.rfid != null &&
+                        value.tinggi != null
+                    ) {
+                        // console.log({
+                        //     nama: value.rfid,
+                        //     tinggi: value.tinggi,
+                        //     updated: value.updated
+                        // });
+                        tenItemBerat.push(value.berat);
+                        tenItemTinggi.push(value.tinggi);
+                        tenItemUpdated.push(value.rfid);
+                    }
+                });
+
+
+                // if (tenItemBerat.length > 10) {
+                //     tenItemBerat.shift();
+                // }
+                // if (tenItemTinggi.length > 10) {
+                //     tenItemTinggi.shift();
+                // }
+                // if (tenItemUpdated.length > 10) {
+                //     tenItemUpdated.shift();
+                // }
+
+                while (tenItemBerat.length > 10) tenItemBerat.shift();
+                while (tenItemTinggi.length > 10) tenItemTinggi.shift();
+                while (tenItemUpdated.length > 10) tenItemUpdated.shift();
+
+                chartBerat.data.labels = tenItemUpdated;
+                chartTinggi.data.labels = tenItemUpdated;
+
+                chartBerat.data.datasets[0].data = tenItemBerat;
+                chartTinggi.data.datasets[0].data = tenItemTinggi;
+                // console.log(tenItemTinggi)
+                chartBerat.update();
+                chartTinggi.update();
+                realtime = true;
+            });
+            // fb.ref('/status').on('value', snapshot => {
+            //     // $('#berat').html(snapshot.val().berat);
+            //     // $('#tinggi').html(snapshot.val().tinggi);
+            //     // $('#rfid').html(snapshot.val().rfid);
+            //     // $('#klasifikasi').html(snapshot.val().klasifikasi);
+            //     // $('#updated').html(snapshot.val().updated);
+            //     if (realtime) {
+            //         chartBerat.data.labels.push(snapshot.val().rfid);
+            //         chartTinggi.data.labels.push(snapshot.val().rfid);
+            //         chartBerat.data.datasets[0].data.push(snapshot.val().berat);
+            //         chartTinggi.data.datasets[0].data.push(snapshot.val().tinggi);
+
+            //         if (chartBerat.data.labels.length > 10) {
+            //             chartBerat.data.labels.shift();
+            //         }
+            //         if (chartTinggi.data.labels.length > 10) {
+            //             chartTinggi.data.labels.shift();
+            //         }
+            //         if (chartBerat.data.datasets[0].data.length > 10) {
+            //             chartBerat.data.datasets[0].data.shift();
+            //         }
+            //         if (chartTinggi.data.datasets[0].data.length > 10) {
+            //             chartTinggi.data.datasets[0].data.shift();
+            //         }
+
+            //         chartBerat.update();
+            //         chartTinggi.update();
+            //     }
+            // });
+            // firebase.database().ref('/tinggi').on('value', snapshot => {
+            //   $('#berat').html(snapshot.val());
+            // });
+            // firebase.firestore().doc('/foo/bar').get().then(() => { });
+            // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+            // firebase.messaging().requestPermission().then(() => { });
+            // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+            // firebase.analytics(); // call to activate
+            // firebase.analytics().logEvent('tutorial_completed');
+            // firebase.performance(); // call to activate
+            //
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+            try {
+                let app = firebase.app();
+                let features = [
+                    'auth',
+                    'database',
+                    'firestore',
+                    'functions',
+                    'messaging',
+                    'storage',
+                    'analytics',
+                    'remoteConfig',
+                    'performance',
+                ].filter(feature => typeof app[feature] === 'function');
+                // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+            } catch (e) {
+                console.error(e);
+                // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anggi Dashboard Monitor</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/9.6.7/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/9.6.7/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/9.6.7/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style>
+        body {
+            background-image: url('img/bg1.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img
+                    src="https://firebase.google.com/downloads/brand-guidelines/PNG/logo-standard.png?hl=id" alt=""
+                    height="30"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center w-100">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about_bmi.html">About BMI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Dashboard Monitor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="grafis.html">Grafik</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="inputUser.html">Input User</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-warning" onclick="profil()">Profil</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <form id="formInput">
+                    <div class="mb-3">
+                        <label for="inputNama" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="inputNama" name="nama">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputRFID" class="form-label">RFID</label>
+                        <input type="text" class="form-control" id="inputRFID" name="rfid">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function profil() {
+            Swal.fire({
+                title: 'Profil',
+                html: 'Arika Anggi Cahyani<br>20/460862/SV/17943<br>Teknologi Rekayasa Instrumentasi dan Kontrol<br>Sekolah Vokasi<br>arikacahyani12@gmail.com',
+                imageUrl: 'img/profil.jpeg',
+                imageWidth: 330,
+                imageHeight: 467,
+                imageAlt: 'Custom image',
+            })
+        }
+        $(document).ready(function () {
+
+            var users = {};
+            const loadEl = document.querySelector('#load');
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+            // // The Firebase SDK is initialized and available here!
+            //
+            // firebase.auth().onAuthStateChanged(user => { });
+
+            const fb = firebase.database();
+            fb.ref('/users').on('value', snapshot => {
+                users = snapshot.val();
+            });
+            // fb.ref('/status').on('value', snapshot => {});
+            // firebase.database().ref('/tinggi').on('value', snapshot => {
+            //   $('#berat').html(snapshot.val());
+            // });
+            // firebase.firestore().doc('/foo/bar').get().then(() => { });
+            // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+            // firebase.messaging().requestPermission().then(() => { });
+            // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+            // firebase.analytics(); // call to activate
+            // firebase.analytics().logEvent('tutorial_completed');
+            // firebase.performance(); // call to activate
+            //
+            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+            try {
+                let app = firebase.app();
+                let features = [
+                    'auth',
+                    'database',
+                    'firestore',
+                    'functions',
+                    'messaging',
+                    'storage',
+                    'analytics',
+                    'remoteConfig',
+                    'performance',
+                ].filter(feature => typeof app[feature] === 'function');
+                // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+            } catch (e) {
+                console.error(e);
+                // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+            }
+
+
+            $("#formInput").submit(function (e) {
+                var values = {};
+                $.each($('#formInput').serializeArray(), function (i, field) {
+                    values[field.name] = field.value;
+                });
+                var idRfid = values.rfid;
+                if (Cookies.get('user') != undefined) { // Apakah sudah login?
+                    var update = firebase.database().ref("/dataRfid").update({
+                        [idRfid]: values
+                    });
+                    Swal.fire(
+                        'Nice!',
+                        'Penambahan anggota sukses!',
+                        'success'
+                    );
+                } else { //Login
+                    Swal.fire({
+                        title: 'Login',
+                        text: 'Anda belum login!',
+                        html: `<input type="text" id="login" class="swal2-input" placeholder="Username">` + `<input type="password" id="password" class="swal2-input" placeholder="Password">`,
+                        confirmButtonText: 'Sign in',
+                        focusConfirm: false,
+                        preConfirm: () => {
+                            const login = Swal.getPopup().querySelector('#login').value
+                            const password = Swal.getPopup().querySelector('#password').value
+                            if (!login || !password) {
+                                Swal.showValidationMessage(`Please enter login and password`)
+                            }
+                            return { login: login, password: password }
+                        }
+                    }).then((result) => {
+                        var username = result.value.login;
+                        var password = result.value.password;
+                        // console.log(username + " " + password);
+                        // console.log(users);
+                        var foundUser = false;
+                        $.each(users, function (i, value) {
+                            if (i == username) {
+                                if (users[username]['password'] == password) {
+                                    Cookies.set('user', username);
+                                    foundUser = true;
+                                }
+                            }
+                        });
+                        if (foundUser) {
+                            Swal.fire(
+                                'Nice!',
+                                'Login Success!',
+                                'success'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Oh no!',
+                                'Sepertinya salah password atau user',
+                                'error'
+                            );
+                        }
+
+                    })
+
+                }
+                e.preventDefault();
+            });
+        });
+    </script>
+
+</body>
+
+</html>
