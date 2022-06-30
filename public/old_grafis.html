@@ -95,51 +95,22 @@
             </div>
         </div>
     </nav>
-    <div class="container pt-1">
-        <div class="card">
-            <div class="card-header">Pilih nama untuk menampilkan chart</div>
-            <div class="card-body">
-                <div class="list-group" id="listNama">
-                    <!-- <button type="button" class="list-group-item list-group-item-action">A second item</button>
-                    <button type="button" class="list-group-item list-group-item-action">A third button item</button>
-                    <button type="button" class="list-group-item list-group-item-action">A fourth button item</button> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modalChartBeratTinggi" tabindex="-1" aria-labelledby="modalChartBeratTinggiLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalChartBeratTinggiLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card mt-1 mb-2">
-                                <div class="card-header">Berat</div>
-                                <div class="card-body">
-                                    <canvas id="chartBerat" class="w-100"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="card mt-1 mb-2">
-                                <div class="card-header">Tinggi</div>
-                                <div class="card-body">
-                                    <canvas id="chartTinggi" class="w-100"></canvas>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mt-1 mb-2">
+                    <div class="card-header">Berat</div>
+                    <div class="card-body">
+                        <canvas id="chartBerat" class="w-100"></canvas>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+            <div class="col-md-12">
+                <div class="card mt-1 mb-2">
+                    <div class="card-header">Tinggi</div>
+                    <div class="card-body">
+                        <canvas id="chartTinggi" class="w-100"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -197,13 +168,13 @@
         }
         var insert_log = 1;
         $(document).ready(function () {
-            // var table = $('#log_table').DataTable({
-            //     lengthChange: false,
-            //     buttons: ['copy', 'excel', 'pdf', 'colvis']
-            // });
+            var table = $('#log_table').DataTable({
+                lengthChange: false,
+                buttons: ['copy', 'excel', 'pdf', 'colvis']
+            });
 
-            // table.buttons().container()
-            //     .appendTo('#log_table_wrapper .col-md-6:eq(0)');
+            table.buttons().container()
+                .appendTo('#log_table_wrapper .col-md-6:eq(0)');
 
             const loadEl = document.querySelector('#load');
             // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -213,58 +184,85 @@
 
             const fb = firebase.database();
             var realtime = false;
-            var data = {};
             fb.ref('/log').once('value', snapshot => {
                 var log = snapshot.val();
+                var tenItemBerat = [];
+                var tenItemTinggi = [];
+                var tenItemUpdated = [];
                 $.each(log, function (key, value) {
                     if (
                         value.berat != null &&
                         value.rfid != null &&
-                        value.tinggi != null &&
-                        value.updated != null
+                        value.tinggi != null
                     ) {
-                        var nama = value.rfid;
-                        if (data[nama] == null) {
-                            data[nama] = {
-                                "tinggi": [],
-                                "berat": [],
-                                "updated": []
-                            }
-                        }
-                        data[nama]["tinggi"].push(value.tinggi);
-                        data[nama]["berat"].push(value.berat);
-                        data[nama]["updated"].push(value.updated);
+                        // console.log({
+                        //     nama: value.rfid,
+                        //     tinggi: value.tinggi,
+                        //     updated: value.updated
+                        // });
+                        tenItemBerat.push(value.berat);
+                        tenItemTinggi.push(value.tinggi);
+                        tenItemUpdated.push(value.rfid);
                     }
                 });
 
-                if (data != []) {
-                    // console.log(data);
-                    $.each(data, function (key, value) {
-                        // console.log(key + " " + value);
-                        $("#listNama").append(`<button type="button" class="list-group-item list-group-item-action btnNama" data-nama="${key}">${key}</button>`);
-                    });
-                    $('.btnNama').click(function () {
-                        // console.log($(this).data('nama'));
-                        var nama = $(this).data('nama');
-                        chartBerat.data.labels = data[nama]["updated"];
-                        chartTinggi.data.labels = data[nama]["updated"];
-                        chartBerat.data.datasets[0].data = data[nama]["berat"];
-                        chartTinggi.data.datasets[0].data = data[nama]["tinggi"];
 
-                        while (chartBerat.data.labels.length > 10) chartBerat.data.labels.shift();
-                        while (chartTinggi.data.labels.length > 10) chartTinggi.data.labels.shift();
-                        while (chartBerat.data.datasets[0].data.length > 10) chartBerat.data.datasets[0].data.shift();
-                        while (chartTinggi.data.datasets[0].data.length > 10) chartTinggi.data.datasets[0].data.shift();
+                // if (tenItemBerat.length > 10) {
+                //     tenItemBerat.shift();
+                // }
+                // if (tenItemTinggi.length > 10) {
+                //     tenItemTinggi.shift();
+                // }
+                // if (tenItemUpdated.length > 10) {
+                //     tenItemUpdated.shift();
+                // }
 
-                        chartBerat.update();
-                        chartTinggi.update();
-                        $('#modalChartBeratTinggiLabel').html(nama);
-                        $('#modalChartBeratTinggi').modal('show');
-                    });
-                } else {
-                    console.log("Data kosong");
-                }
+                while (tenItemBerat.length > 10) tenItemBerat.shift();
+                while (tenItemTinggi.length > 10) tenItemTinggi.shift();
+                while (tenItemUpdated.length > 10) tenItemUpdated.shift();
+
+                chartBerat.data.labels = tenItemUpdated;
+                chartTinggi.data.labels = tenItemUpdated;
+
+                chartBerat.data.datasets[0].data = tenItemBerat;
+                chartTinggi.data.datasets[0].data = tenItemTinggi;
+                // console.log(tenItemTinggi)
+                chartBerat.update();
+                chartTinggi.update();
+                realtime = true;
             });
+            // fb.ref('/status').on('value', snapshot => {
+            //     // $('#berat').html(snapshot.val().berat);
+            //     // $('#tinggi').html(snapshot.val().tinggi);
+            //     // $('#rfid').html(snapshot.val().rfid);
+            //     // $('#klasifikasi').html(snapshot.val().klasifikasi);
+            //     // $('#updated').html(snapshot.val().updated);
+            //     if (realtime) {
+            //         chartBerat.data.labels.push(snapshot.val().rfid);
+            //         chartTinggi.data.labels.push(snapshot.val().rfid);
+            //         chartBerat.data.datasets[0].data.push(snapshot.val().berat);
+            //         chartTinggi.data.datasets[0].data.push(snapshot.val().tinggi);
+
+            //         if (chartBerat.data.labels.length > 10) {
+            //             chartBerat.data.labels.shift();
+            //         }
+            //         if (chartTinggi.data.labels.length > 10) {
+            //             chartTinggi.data.labels.shift();
+            //         }
+            //         if (chartBerat.data.datasets[0].data.length > 10) {
+            //             chartBerat.data.datasets[0].data.shift();
+            //         }
+            //         if (chartTinggi.data.datasets[0].data.length > 10) {
+            //             chartTinggi.data.datasets[0].data.shift();
+            //         }
+
+            //         chartBerat.update();
+            //         chartTinggi.update();
+            //     }
+            // });
+            // firebase.database().ref('/tinggi').on('value', snapshot => {
+            //   $('#berat').html(snapshot.val());
+            // });
             // firebase.firestore().doc('/foo/bar').get().then(() => { });
             // firebase.functions().httpsCallable('yourFunction')().then(() => { });
             // firebase.messaging().requestPermission().then(() => { });
@@ -294,8 +292,6 @@
                 // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
             }
         });
-
-
     </script>
 
 </body>
